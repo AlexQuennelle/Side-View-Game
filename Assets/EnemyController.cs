@@ -5,15 +5,11 @@ using UnityEngine;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] Rigidbody2D player;
-    [SerializeField] float moveSpeed;
+    [SerializeField] int moveSpeed;
 	[SerializeField] bool loop = true;
-	bool first = true;
-	Vector3 currentDir = new Vector3(2.0f,0.0f,0.0f);
+	Vector3 currentDir = new Vector3(0.0f,0.0f,0.0f);
 
-	//[SerializeField] Vector3 currentDirection, targetDir;
-	//Vector2 hitForward, hitLeft, hitRight;
-	//Vector2 fBA, fBB;
-	List <Vector2> directions = new List <Vector2>
+	readonly List <Vector2> directions = new List <Vector2>
 	{
 		Vector2.up,
 		Vector2.down,
@@ -22,33 +18,7 @@ public class EnemyController : MonoBehaviour
 	};
 	void Awake()
 	{
-	}
-	void Update()
-	{
-		if (first)
-		{
-			first = false;
-			StartCoroutine(Loop());
-		}
-	}
-	void FixedUpdate()
-    {
-		#region Deprecated
-		//targetDir = currentDirection;
-		//Vector3 right = new Vector3(currentDirection.y, currentDirection.x, 0);
-		////hitForward = Physics2D.Raycast(transform.position + (currentDirection * 1.125f), currentDirection, 100.0f, -73).point;
-		////hitRight = Physics2D.Raycast(transform.position + (right * 1.125f),right, 100.0f, -73).point;
-		////hitLeft = Physics2D.Raycast(transform.position + (-right * 1.125f), -right, 100.0f, -73).point;
-		//fBA = transform.position - right + currentDirection;
-		//fBB = transform.position + right + (currentDirection * 1.125f);
-		//Collider2D col = Physics2D.OverlapArea(fBA, fBB, -201);
-		//if(col != null)
-		//{
-		//    Debug.Log(col.name);
-		//}
-
-		//transform.position += currentDirection * moveSpeed;
-		#endregion
+		StartCoroutine(Loop());
 	}
 	IEnumerator Loop()
 	{
@@ -60,21 +30,38 @@ public class EnemyController : MonoBehaviour
 	}
 	IEnumerator PickDirection()
 	{
-		Vector2 targetDir = (Vector2)transform.position - player.position;
-		directions.Sort((a, b) => ((int)(Vector2.Dot(a, targetDir) * 10) - (int)(Vector2.Dot(b, targetDir) * 10)));
-		currentDir = directions[0] * new Vector2(2.0f, 3.0f);
+		List<Vector2> options = new List<Vector2>(directions);
+		options.Remove(-currentDir.normalized);
+
+		for (int i = 0; i < 4; i++)
+		{
+			Vector2 p = Physics2D.Raycast(transform.position, directions[i], 100.0f, -193).point;
+			if(Vector2.Distance(p, transform.position) < 1.5f)
+			{
+				options.Remove(directions[i]);
+			}
+		}
+		Debug.Log(options.Count);
+
+		if (options.Count < 1)
+		{
+			options.Add(-currentDir.normalized);
+		}
+		Vector2 targetDir = ((Vector2)transform.position - player.position).normalized;
+		options.Sort((a, b) => ((int)(Vector2.Dot(a, targetDir) * 10) - (int)(Vector2.Dot(b, targetDir) * 10)));
+		currentDir = options[0] * new Vector2(2.0f, 3.0f);
 		yield break;
 	}
 	IEnumerator Move()
 	{
 		Vector2 p = transform.position + currentDir;
 		Vector2 o = transform.position;
-		Debug.Log(o + ", " + p);
-		for(int i = 1; i < 101; i++)
+		for(int i = 1; i < 34; i++)
 		{
-			transform.position = Vector2.Lerp(o, p, i * 0.01f);
+			transform.position = Vector2.Lerp(o, p, i * 0.03f);
 			yield return new WaitForEndOfFrame();
 		}
+		transform.position = p;
 	}
 
 	private void OnDrawGizmos()
