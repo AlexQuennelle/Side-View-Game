@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] Rigidbody2D player;
     [SerializeField] int moveSpeed;
 	[SerializeField] bool loop = true;
 	Vector3 currentDir = new Vector3(0.0f,0.0f,0.0f);
+	public Vector2 targetPos;
 
 	readonly List <Vector2> directions = new List <Vector2>
 	{
@@ -24,33 +24,31 @@ public class EnemyController : MonoBehaviour
 	{
 		while (loop)
 		{
-			yield return PickDirection();
+			PickDirection();
 			yield return Move();
 		}
 	}
-	IEnumerator PickDirection()
+	void PickDirection()
 	{
 		List<Vector2> options = new List<Vector2>(directions);
 		options.Remove(-currentDir.normalized);
 
 		for (int i = 0; i < 4; i++)
 		{
-			Vector2 p = Physics2D.Raycast(transform.position, directions[i], 100.0f, -193).point;
+			Vector2 p = Physics2D.Raycast(transform.position, directions[i], 100.0f, -201).point;
 			if(Vector2.Distance(p, transform.position) < 1.5f)
 			{
 				options.Remove(directions[i]);
 			}
 		}
-		Debug.Log(options.Count);
 
 		if (options.Count < 1)
 		{
 			options.Add(-currentDir.normalized);
 		}
-		Vector2 targetDir = ((Vector2)transform.position - player.position).normalized;
+		Vector2 targetDir = ((Vector2)transform.position - targetPos).normalized;
 		options.Sort((a, b) => ((int)(Vector2.Dot(a, targetDir) * 10) - (int)(Vector2.Dot(b, targetDir) * 10)));
 		currentDir = options[0] * new Vector2(2.0f, 3.0f);
-		yield break;
 	}
 	IEnumerator Move()
 	{
@@ -63,12 +61,4 @@ public class EnemyController : MonoBehaviour
 		}
 		transform.position = p;
 	}
-
-	private void OnDrawGizmos()
-    {
-        //Gizmos.color = Color.black;
-        //Gizmos.DrawLine(transform.position, player.position);
-        //Gizmos.color = Color.white;
-        //Gizmos.DrawLine(transform.position, transform.position + (targetDir * 2));
-    }
 }
