@@ -57,7 +57,7 @@ public class EnemyController : MonoBehaviour
 		for(int i = 1; i < 34; i++)
 		{
 			transform.position = Vector2.Lerp(o, p, i * 0.03f);
-			yield return new WaitForEndOfFrame();
+			yield return new WaitForFixedUpdate();
 		}
 		transform.position = p;
 	}
