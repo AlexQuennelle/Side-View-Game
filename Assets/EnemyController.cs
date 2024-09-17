@@ -96,4 +96,11 @@ public class EnemyController : MonoBehaviour
 		//set the enemy's position to p to account for any small errors in the factor of i in the loop
 		transform.position = p;
 	}
+	void OnTriggerEnter2D(Collider2D collision)
+	{
+		PlayerController plrCont = collision.gameObject.GetComponent<PlayerController>();
+		if (plrCont == null) return;
+		plrCont.TakeDamage();
+		//Debug.Log("Hit Player");
+	}
 }
