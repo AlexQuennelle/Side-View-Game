@@ -1,19 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 using UnityEngine;
+using TMPro;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] GameObject gameOver;
-    public void StartGame()
-    {
-    }
-    public void EndGame()
-    {
-		gameOver.SetActive(true);
+	[SerializeField] TextMeshProUGUI gameTxt, endTxt;
+	public void MoveScore()
+	{
+		endTxt.text = gameTxt.text;
 	}
 	public void RestartGame()
 	{
-
+		SceneManager.LoadScene(0);
 	}
 }
