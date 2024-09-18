@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.Mathematics;
 using UnityEngine.Events;
 using UnityEngine;
 
@@ -10,6 +7,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] float moveSpeed = 5f;
 	[SerializeField] float jumpStr = 2f;
 
+	//unity event that is invoked when the player dies
+	//this event is used to trigger changes that need to happen in the scene after the player dies
 	[SerializeField] UnityEvent OnDeath = new UnityEvent();
 	//variable for storing the player's rigidbody component to apply forces to
 	Rigidbody2D rb;
@@ -100,8 +99,11 @@ public class PlayerController : MonoBehaviour
 			grounded = false;
 		}
 	}
+	//public method that contains the logic for what happens when the player takes damage
+	//this method is only called externally, never from this script
 	public void TakeDamage()
 	{
+		//set the player game object to inactive and invoke the OnDeath() event for external logic
 		gameObject.SetActive(false);
 		OnDeath.Invoke();
 	}

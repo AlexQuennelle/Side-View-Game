@@ -96,11 +96,17 @@ public class EnemyController : MonoBehaviour
 		//set the enemy's position to p to account for any small errors in the factor of i in the loop
 		transform.position = p;
 	}
+	//method that is called when a collider with a rigidbody attached enters the trigger collider
+	//provides a reference to the collider of the object that entered the trigger
 	void OnTriggerEnter2D(Collider2D collision)
 	{
+		//try to fetch a PlayerController component from the game object attached to the collider
 		PlayerController plrCont = collision.gameObject.GetComponent<PlayerController>();
+		//if that variable evaluates to null, return
+		//a null in this case means there was no PlayerController component attached
 		if (plrCont == null) return;
+
+		//call the TakeDamage() method on the PlayerController component
 		plrCont.TakeDamage();
-		//Debug.Log("Hit Player");
 	}
 }
