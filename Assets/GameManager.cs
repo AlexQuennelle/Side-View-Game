@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
 		if (timeRemaining <= 0)
 		{
 			runTimer = false;
+			timerTxt.text = "000";
 			OnGameEnd.Invoke();
 		}
 	}
