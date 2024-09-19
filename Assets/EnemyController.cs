@@ -12,11 +12,11 @@ public class EnemyController : MonoBehaviour
 	public Vector2 targetPos;
 	//vector3 storign the current direction in which the enemy is moveing
 	//Z component is always 0
-	Vector3 currentDir = new Vector3(0.0f,0.0f,0.0f);
+	Vector3 currentDir = new Vector3(0.0f, 0.0f, 0.0f);
 
 	//list of possible directions the enemy can take
 	//this list is never used directly, but is instead copied
-	readonly List <Vector2> directions = new List <Vector2>
+	readonly List<Vector2> directions = new List<Vector2>
 	{
 		Vector2.up,
 		Vector2.down,
@@ -56,7 +56,7 @@ public class EnemyController : MonoBehaviour
 			//send a raycast in the direction we are checking,
 			//and if the point it hits is closer than 1.5 units away, remove it from the options list
 			Vector2 p = Physics2D.Raycast(transform.position, directions[i], 100.0f, -201).point;
-			if(Vector2.Distance(p, transform.position) < 1.5f)
+			if (Vector2.Distance(p, transform.position) < 1.5f)
 			{
 				options.Remove(directions[i]);
 			}
@@ -85,7 +85,7 @@ public class EnemyController : MonoBehaviour
 		Vector2 o = transform.position;
 		//loop several times, waiting for the next FixedUpdate() call after each itterarion
 		//this means whatever happens inside the loop will take place over a certain length of time
-		for(int i = 1; i < 34; i++)
+		for (int i = 1; i < 34; i++)
 		{
 			//set the enemy's position to be a value between o and p
 			//the exact value is determined by the current loop itteration i

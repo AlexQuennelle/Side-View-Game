@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
@@ -29,7 +27,7 @@ public class EnemyManager : MonoBehaviour
 		cBrain.targetPos = player.transform.position;
 		//set the ambusher's target position to a point 8 units away from the player in the direction they're travelling
 		aBrain.targetPos = player.transform.position + (Vector3)(playerRb.velocity.normalized * 8);
-		
+
 
 		/*************************************/
 		/*Logic for Whimsical target position*/
