@@ -73,6 +73,11 @@ public class PlayerController : MonoBehaviour
 		}
 		//add force on the x axis of the player's rigidbody equaly to the input variable times the move speed
 		rb.AddForce(new Vector2(xIn * moveSpeed, 0));
+		ScreenWrap();
+	}
+	void ScreenWrap()
+	{
+		transform.position = new Vector3(((transform.position.x + (19 * 3)) % (19 * 2)) - 19, transform.position.y, 0);
 	}
 	//method that is called either when the collider enters a trigger, or when the trigger enters a collider
 	//both game objects involved must have rigidbody components to trigger this method
